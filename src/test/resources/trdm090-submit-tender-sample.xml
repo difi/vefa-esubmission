@@ -1,0 +1,68 @@
+<!--Alle kode-verdier og identifikatorer er testverdier, og er ikke nødvendigvis gyldig i en fremtidig implementasjon-->
+<?xml version="1.0" encoding="UTF-8"?>
+<Tender xmlns:xs="http://www.w3.org/2001/XMLSchema"
+        xmlns="urn:oasis:names:specification:ubl:schema:xsd:Tender-2"
+        xmlns:cac="urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2"
+        xmlns:cbc="urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2">
+    <cbc:UBLVersionID>2.1</cbc:UBLVersionID>
+    <!--Vet ikke 100% hva som blir riktig versjon av customizationID og profileID på denne transaksjonen,
+        men forslagene under er en kvalifisert gjetning-->
+    <cbc:CustomizationID>urn:www.cenbii.eu:transaction:biitrdm090:ver3.0</cbc:CustomizationID>
+    <cbc:ProfileID>urn:www.cenbii.eu:profile:bii54:ver3.0</cbc:ProfileID>
+    <cbc:ID>TND12345</cbc:ID>
+    <cbc:ContractFolderID>REF98</cbc:ContractFolderID>
+    <cbc:IssueDate>2015-08-04</cbc:IssueDate>
+    <cbc:IssueTime>09:10:10</cbc:IssueTime>
+    <cac:DocumentReference>
+        <cbc:ID>CALL123</cbc:ID>
+        <cbc:DocumentTypeCode>CFT</cbc:DocumentTypeCode>
+        <cbc:VersionID>1</cbc:VersionID>
+        <cbc:DocumentDescription>Call for tender referanse</cbc:DocumentDescription>
+    </cac:DocumentReference>
+    <cac:DocumentReference>
+        <cbc:ID>TEN345</cbc:ID>
+        <cbc:DocumentTypeCode>TEN</cbc:DocumentTypeCode>
+        <cbc:DocumentDescription>Provided tender document</cbc:DocumentDescription>
+        <cac:Attachment>
+            <cac:Externalreference>
+                <cbc:DocumentHash>de9f2c7fd25e1b3afad3e85a0bd17d9b100db4b3</cbc:DocumentHash>
+                <cbc:HashAlgorithmMethod>SHA-1</cbc:HashAlgorithmMethod>
+                <cbc:FileName>Filnavn</cbc:FileName>
+            </cac:Externalreference>
+        </cac:Attachment>
+    </cac:DocumentReference>
+    <cac:TendererParty>
+        <!--EndpointID bør rettes til den reelle part som deltar i testen-->
+        <cbc:EndpointID schemeID="NO:ORGNR">999888777</cbc:EndpointID>
+        <cac:PartyIdentification>
+            <cbc:ID schemeID="ZZZ">T12345678</cbc:ID>
+        </cac:PartyIdentification>
+        <cac:PartyName>
+            <cbc:Name>Tender party</cbc:Name>
+        </cac:PartyName>
+        <cac:PostalAddress>
+            <cbc:StreetName>Gateadresse</cbc:StreetName>
+            <cbc:CityName>OSLO</cbc:CityName>
+            <cbc:PostalZone>0101</cbc:PostalZone>
+            <cac:Country>
+                <cbc:IdentificationCode listID="ISO3166-1:Alpha2">NO</cbc:IdentificationCode>
+            </cac:Country>
+        </cac:PostalAddress>
+        <cac:Contact>
+            <cbc:Name>Kontaktperson</cbc:Name>
+            <cbc:ElectronicMail>kontaktperson@epost.no</cbc:ElectronicMail>
+        </cac:Contact>
+    </cac:TendererParty>
+    <cac:ContractingParty>
+        <cac:Party>
+            <!--EndpointID bør rettes til den reelle part som deltar i testen-->
+            <cbc:EndpointID schemeID="NO:ORGNR">111222333<</cbc:EndpointID>
+            <cac:PartyIdentification>
+                <cbc:ID schemeID="ZZZ">CP98765</cbc:ID>
+            </cac:PartyIdentification>
+            <cac:PartyName>
+                <cbc:Name>Contracting body</cbc:Name>
+            </cac:PartyName>
+        </cac:Party>
+    </cac:ContractingParty>
+</Tender>
