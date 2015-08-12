@@ -37,8 +37,9 @@ java -jar vefa-innlevering.jar -o message42.asice -bis trdm090.xml -a brochure.p
 ### Creating multiple ASiC archives
 A directory is scanned, and for each XML file found, an ASiC archive is created.
 
+Note! This feature has not yet been implemented.
 ```
 ### Iterates all XML files in directory_name and creates corresponding messages
-java -jar vefa-innlevering.jar -d directory_name \
+java -jar vefa-innlevering.jar -d directory_name -out directory_name \
      -keystore keystore.jks -ksp keystore_password -pkp private_key_password
 ```
