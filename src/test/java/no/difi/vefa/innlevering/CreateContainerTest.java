@@ -20,7 +20,7 @@ import static org.testng.Assert.assertTrue;
 public class CreateContainerTest {
 
     public static final String TRDM090_SUBMIT_TENDER_SAMPLE_XML = "trdm090-submit-tender-sample.xml";
-    public static final String VEFA_INNLEVERING_JKS = "vefa-innlevering-old.jks";
+    public static final String VEFA_INNLEVERING_JKS = "vefa-innlevering.jks";
 
     public static final Logger log = LoggerFactory.getLogger(CreateContainerTest.class);
 

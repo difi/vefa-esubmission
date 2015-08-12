@@ -47,6 +47,7 @@ public class CmdLineOptionsTest {
         CmdLineParser cmdLineParser = new CmdLineParser(options);
         String args[] = {
                 "-bis", "trdm090.xml",
+                "-ks","test",
                 "-kp", "changeit",
                 "-pp", "changeit"
         };

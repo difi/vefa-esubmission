@@ -1,4 +1,4 @@
-<!--Alle kode-verdier og identifikatorer er testverdier, og er ikke nødvendigvis gyldig i en fremtidig implementasjon-->
+<!-- Alle kode-verdier og identifikatorer er testverdier, og er ikke nødvendigvis gyldig i en fremtidig implementasjon -->
 <?xml version="1.0" encoding="UTF-8"?>
 <Tender xmlns:xs="http://www.w3.org/2001/XMLSchema"
         xmlns="urn:oasis:names:specification:ubl:schema:xsd:Tender-2"

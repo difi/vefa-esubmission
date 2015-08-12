@@ -24,7 +24,7 @@ public class CmdLineOptions {
     @Option(name = "-b", aliases = {"-bis"}, usage="Name of main XML BIS file",metaVar = "<file>",required = true, forbids={"-d"})
     File bisFileName = null;
 
-    @Option(name = "-ks", aliases = {"-keystore"}, usage = "File holding the JKS keystore")
+    @Option(name = "-ks", aliases = {"-keystore"}, usage = "File holding the JKS keystore", required = true)
     File keyStoreFile;
 
     @Option(name = "-kp", usage = "KeyStore password.", metaVar = "<KeyStorePassword>")

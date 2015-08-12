@@ -2,18 +2,14 @@ package no.difi.vefa.innlevering;
 
 import no.difi.asic.AsicWriter;
 import no.difi.asic.AsicWriterFactory;
+import no.difi.asic.MimeType;
 import no.difi.asic.SignatureHelper;
 import org.kohsuke.args4j.CmdLineException;
 import org.kohsuke.args4j.CmdLineParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.URL;
+import java.io.*;
 
 /**
  * Hello world!
@@ -46,12 +42,22 @@ public class Main
         SignatureHelper signatureHelper = configureSignatureHelper(options);
 
         // Creating a single ASiC archive or multiple?
+        try {
+            createSingleArchive(options, signatureHelper);
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+        }
+    }
+
+    private static void createSingleArchive(CmdLineOptions options, SignatureHelper signatureHelper) {
         if (options.getBisFileName() != null) {
 
-            File bisFileVerified = verifyBisFile(options.getBisFileName());
+            InputStream bisFileVerified = inputStreamForBisFile(options.getBisFileName());
+            String bisFileEntryName = entryNameFor(options.getBisFileName());
+
             try {
                 AsicWriter asicWriter = AsicWriterFactory.newFactory().newContainer(options.getArchiveFileName());
-                asicWriter.add(bisFileVerified).setRootEntryName(bisFileVerified.getName());
+                asicWriter.add(bisFileVerified, bisFileEntryName, MimeType.forString("application/xml")).setRootEntryName(bisFileEntryName);
 
                 for (File attachmentfile : options.getAttachments()) {
                     asicWriter.add(attachmentfile);
@@ -66,33 +72,36 @@ public class Main
         }
     }
 
-    private static File verifyBisFile(File bisFileName) {
-        File bisFile = null;
+    private static String entryNameFor(File bisFileName) {
         if ("test".equals(bisFileName.getName().toLowerCase())) {
-            URL internalSampleUrl = Main.class.getClassLoader().getResource(TRDM090_SUBMIT_TENDER_SAMPLE_XML);
-            if (internalSampleUrl == null) {
+            return TRDM090_SUBMIT_TENDER_SAMPLE_XML;
+        } else
+            return bisFileName.getName();
+    }
+
+    private static InputStream inputStreamForBisFile(File bisFileName) {
+        InputStream bisFileAsInputStream = null;
+        if ("test".equals(bisFileName.getName().toLowerCase())) {
+            bisFileAsInputStream = Main.class.getClassLoader().getResourceAsStream(TRDM090_SUBMIT_TENDER_SAMPLE_XML);
+            if (bisFileAsInputStream == null) {
                 throw new IllegalStateException("Internal sample file " + TRDM090_SUBMIT_TENDER_SAMPLE_XML + " not found in classpath");
             }
-            try {
-                bisFile = new File(internalSampleUrl.toURI());
-            } catch (URISyntaxException e) {
-                throw new IllegalStateException("Unable to convert " + internalSampleUrl + " to File object." + e.getMessage(), e);
-            }
         } else {
-            bisFile = bisFileName;
+            try {
+                bisFileAsInputStream = new FileInputStream(bisFileName);
+            } catch (FileNotFoundException e) {
+                throw new IllegalStateException("File " + bisFileName + " not found.", e);
+            }
         }
 
-        if (!bisFile.canRead()) {
-            throw new IllegalStateException("Unable to read file " + bisFile);
-        }
-        return bisFile;
+        return bisFileAsInputStream;
     }
 
 
     private static SignatureHelper configureSignatureHelper(CmdLineOptions options)  {
         SignatureHelper signatureHelper = null;
 
-        // Special handling of keystore, passwords etc.
+        // Special handling of keystore, passwords etc. if we are using the "test" keystore
         if ("test".equals(options.getKeyStoreFile().getName().toLowerCase())) {
 
             InputStream testKeyStoreStream = Main.class.getClassLoader().getResourceAsStream("vefa-innlevering.jks");

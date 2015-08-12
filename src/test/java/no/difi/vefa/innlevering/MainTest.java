@@ -17,7 +17,5 @@ public class MainTest {
         };
 
         Main.main(args);
-
-
     }
 }
