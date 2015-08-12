@@ -34,6 +34,7 @@
 package no.difi.vefa.innlevering;
 
 
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import java.io.File;
@@ -45,6 +46,14 @@ import static org.testng.Assert.assertTrue;
  */
 public class MainTest {
 
+    @BeforeMethod
+    public void setUp() {
+        File file = new File(CmdLineOptions.VEFA_INNLEVERING_ASICE);
+        if (file.exists()) {
+            file.delete();
+        }
+    }
+
     @Test
     public void testCreateViaCommandLine() throws Exception {
 
@@ -55,7 +64,8 @@ public class MainTest {
 
         Main.main(args);
 
-        File file = new File("vefa-innlevering.asice");
+        File file = new File(CmdLineOptions.VEFA_INNLEVERING_ASICE);
         assertTrue(file.canRead(), "Seems that the file vefa-innlevering.asice was not created");
+        file.delete();
     }
 }

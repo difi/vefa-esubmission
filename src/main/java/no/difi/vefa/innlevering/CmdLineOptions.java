@@ -42,6 +42,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * Holds the options for executing the program. Three stages:
+ * <ol>
+ *     <li>Reasonable defaults are set.</li>
+ *     <li>Command line is parsed under control of the @Option annotations.</li>
+ *     <li>The properties are inspected again and the effective set of options is set.</li>
+ * </ol>
+ *
+ *
  * @author steinar
  *         Date: 11.08.15
  *         Time: 11.29
@@ -50,15 +58,30 @@ public class CmdLineOptions {
 
     public static final Logger log = LoggerFactory.getLogger(CmdLineOptions.class);
     public static final String VEFA_INNLEVERING_ASICE = "vefa-innlevering.asice";
+    public static final String TEST_FLAG = "test";
 
+    public CmdLineOptions() {
+    }
+
+    /** Default name of output file */
     private File archiveFileName = new File(VEFA_INNLEVERING_ASICE);
+
+    /** Holds attachments listed with -a option */
     private List<File> attachments = new ArrayList<File>();
 
+    /**
+     * The main XML BIS document to be inserted into the ASiC archive. The value "test" indicates to use whatever
+     * XML document has been included in the distribution.
+     */
     @Option(name = "-b", aliases = {"-bis"}, usage="Name of main XML BIS file",metaVar = "<file>",required = true, forbids={"-d"})
     File bisFileName = null;
 
+    /**
+     * The keystore holding the private and public key together with any certificates.
+     * Value of "test" indicates the use of the supplied test keystore.
+     */
     @Option(name = "-ks", aliases = {"-keystore"}, usage = "File holding the JKS keystore", required = true)
-    File keyStoreFile;
+    File keyStoreFile = new File(TEST_FLAG);
 
     @Option(name = "-kp", usage = "KeyStore password.", metaVar = "<KeyStorePassword>")
     String keystorePassword;
@@ -67,7 +90,7 @@ public class CmdLineOptions {
     private String privateKeyPassword;
 
     @Option(name="-d",aliases = {"-dir"},usage = "Directory to scan for XML files", metaVar = "<dirname>",forbids="-bis")
-    private File directory;
+    private File outputDirectory;
 
     @Option(name = "-h", aliases = {"-?", "-help"}, usage = "Print help.", help = true)
     Boolean help = false;
@@ -83,7 +106,6 @@ public class CmdLineOptions {
         log.debug("Adding " + attachment + " to list of files to be attached");
         this.attachments.add(attachment);
     }
-
 
     public File getArchiveFileName() {
         return archiveFileName;
@@ -101,14 +123,12 @@ public class CmdLineOptions {
         return keystorePassword;
     }
 
-
     public String getPrivateKeyPassword() {
         return privateKeyPassword;
     }
 
-
-    public File getDirectory() {
-        return directory;
+    public File getOutputDirectory() {
+        return outputDirectory;
     }
 
     public Boolean getHelp() {
@@ -118,5 +138,7 @@ public class CmdLineOptions {
     public File getKeyStoreFile() {
         return keyStoreFile;
     }
+
+
 }
 

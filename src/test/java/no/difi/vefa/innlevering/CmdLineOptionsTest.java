@@ -35,8 +35,6 @@ package no.difi.vefa.innlevering;
 
 import org.kohsuke.args4j.CmdLineException;
 import org.kohsuke.args4j.CmdLineParser;
-import org.kohsuke.args4j.ExampleMode;
-import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import java.io.File;

@@ -33,7 +33,16 @@
 
 package no.difi.vefa.innlevering;
 
+import no.difi.asic.AsicWriter;
+import no.difi.asic.AsicWriterFactory;
+import no.difi.asic.MimeType;
+import no.difi.asic.SignatureHelper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 
 /**
@@ -43,29 +52,44 @@ import java.util.List;
  */
 class SingleAsicCreator {
 
-    private File bisFileName;
-    private List<File> attachments;
+    private static final Logger log = LoggerFactory.getLogger(SingleAsicCreator.class);
 
-    public void execute() {
+    private final ExecutionOptions executionOptions;
+    private final SignatureHelper signatureHelper;
 
+    public SingleAsicCreator(ExecutionOptions executionOptions, SignatureHelper signatureHelper) {
+
+        this.executionOptions = executionOptions;
+        this.signatureHelper = signatureHelper;
     }
 
-    public SingleAsicCreator bisFile(File bisFileName) {
-        this.bisFileName = bisFileName;
-        return this;
-    }
 
+    public void createAsicFile() {
 
-    public SingleAsicCreator attachments(List<File> attachments) {
-        this.attachments = attachments;
-        return this;
-    }
+        try {
+            AsicWriter asicWriter = AsicWriterFactory.newFactory().newContainer(executionOptions.getArchiveFileName());
 
-    public File create() {
-        return null;
-    }
+            // A BIS file name of "test" indicates to use the internal test XML document.
+            if (executionOptions.isInternalTestBisFileBeingUsed()) {
+                InputStream bisFileVerified = executionOptions.getBisFileInputStream();
+                String entryName = executionOptions.getBisFileEntryName();
 
-    public File sign(File keyStoreFile, String keystorePassword, String privateKeyPassword) {
-        return null;
+                asicWriter.add(bisFileVerified, entryName, MimeType.forString("application/xml")).setRootEntryName(entryName);
+            } else {
+                // Uses whatever was supplied on the command line.
+                asicWriter.add(executionOptions.getBisFileName());
+            }
+
+            for (File attachmentfile : executionOptions.getAttachments()) {
+                asicWriter.add(attachmentfile);
+            }
+            asicWriter.sign(signatureHelper);
+
+        } catch (IOException e) {
+            throw new IllegalStateException("Unable to create ASiC archive in " + executionOptions.getArchiveFileName() + ". " + e.getMessage(), e);
+        }
+
+        log.info("ASiC archive created in:" + executionOptions.getArchiveFileName());
+
     }
 }
