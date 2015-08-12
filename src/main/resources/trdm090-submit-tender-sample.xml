@@ -92,9 +92,7 @@
     <cac:ContractingParty>
         <cac:Party>
             <!--EndpointID bør rettes til den reelle part som deltar i testen-->
-            <cbc:EndpointID schemeID="NO:ORGNR">111222333
-                <
-            </cbc:EndpointID>
+            <cbc:EndpointID schemeID="NO:ORGNR">111222333</cbc:EndpointID>
             <cac:PartyIdentification>
                 <cbc:ID schemeID="ZZZ">CP98765</cbc:ID>
             </cac:PartyIdentification>
