@@ -20,10 +20,10 @@ Furthermore, the `java` command must be available.
 ### Creating a single ASiC archive using the supplied test resources
 `vefa-innlevering` comes with some test files and a test certificate and henceforth, we courteously supply you
 with the ability to create test messages:
-````
+```
 # Creates ASiC archive named 'vefa-innlevering.asice' in current directory
 java -jar vefa-innlevering.jar -bis test -keystore test
-````
+```
 
 ### Creating a single ASiC archive
 This is how you create an ASiC archive from the file `trdm090.xml`:
@@ -38,7 +38,7 @@ java -jar vefa-innlevering.jar -o message42.asice -bis trdm090.xml -a brochure.p
 A directory is scanned, and for each XML file found, an ASiC archive is created.
 
 ```
-# Iterates all XML files in directory_name and creates corresponding messages 
+### Iterates all XML files in directory_name and creates corresponding messages
 java -jar vefa-innlevering.jar -d directory_name \
      -keystore keystore.jks -ksp keystore_password -pkp private_key_password
 ```
