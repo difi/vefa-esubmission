@@ -1,9 +1,12 @@
-<!-- Alle kode-verdier og identifikatorer er testverdier, og er ikke nødvendigvis gyldig i en fremtidig implementasjon -->
 <?xml version="1.0" encoding="UTF-8"?>
 <Tender xmlns:xs="http://www.w3.org/2001/XMLSchema"
         xmlns="urn:oasis:names:specification:ubl:schema:xsd:Tender-2"
         xmlns:cac="urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2"
-        xmlns:cbc="urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2">
+        xmlns:cbc="urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"       >
+
+    <!-- Alle kode-verdier og identifikatorer er testverdier, og er ikke nødvendigvis gyldig i en fremtidig implementasjon -->
+
     <cbc:UBLVersionID>2.1</cbc:UBLVersionID>
     <!--Vet ikke 100% hva som blir riktig versjon av customizationID og profileID på denne transaksjonen,
         men forslagene under er en kvalifisert gjetning-->
@@ -24,11 +27,11 @@
         <cbc:DocumentTypeCode>TEN</cbc:DocumentTypeCode>
         <cbc:DocumentDescription>Provided tender document</cbc:DocumentDescription>
         <cac:Attachment>
-            <cac:Externalreference>
+            <cac:ExternalReference>
                 <cbc:DocumentHash>de9f2c7fd25e1b3afad3e85a0bd17d9b100db4b3</cbc:DocumentHash>
                 <cbc:HashAlgorithmMethod>SHA-1</cbc:HashAlgorithmMethod>
                 <cbc:FileName>Filnavn</cbc:FileName>
-            </cac:Externalreference>
+            </cac:ExternalReference>
         </cac:Attachment>
     </cac:DocumentReference>
     <cac:TendererParty>
@@ -56,7 +59,9 @@
     <cac:ContractingParty>
         <cac:Party>
             <!--EndpointID bør rettes til den reelle part som deltar i testen-->
-            <cbc:EndpointID schemeID="NO:ORGNR">111222333<</cbc:EndpointID>
+            <cbc:EndpointID schemeID="NO:ORGNR">111222333
+                <
+            </cbc:EndpointID>
             <cac:PartyIdentification>
                 <cbc:ID schemeID="ZZZ">CP98765</cbc:ID>
             </cac:PartyIdentification>
