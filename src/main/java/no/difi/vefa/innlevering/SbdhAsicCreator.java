@@ -22,6 +22,15 @@
 
 package no.difi.vefa.innlevering;
 
+import no.difi.asic.AsicWriter;
+import no.difi.asic.AsicWriterFactory;
+import no.difi.asic.MimeType;
+import no.difi.asic.SignatureHelper;
+import org.unece.cefact.namespaces.standardbusinessdocumentheader.ManifestItem;
+import org.unece.cefact.namespaces.standardbusinessdocumentheader.StandardBusinessDocumentHeader;
+
+import java.io.*;
+
 /**
  * @author steinar
  *         Date: 13.08.15
@@ -30,4 +39,66 @@ package no.difi.vefa.innlevering;
 class SbdhAsicCreator {
 
 
+    private final SignatureHelper signatureHelper;
+
+    public SbdhAsicCreator(SignatureHelper signatureHelper) {
+
+        this.signatureHelper = signatureHelper;
+    }
+
+    public void createFrom(File sbdhFile, File asicFile) {
+
+        AsicWriter asicWriter = null;
+
+        try {
+            asicWriter = AsicWriterFactory.newFactory().newContainer(asicFile);
+        } catch (IOException e) {
+            throw new IllegalStateException("Unable to create new container in " + asicFile + " " + e.getMessage(), e);
+        }
+
+        SbdhParser sbdhParser = new SbdhParser();
+        FileInputStream sbdhInputStream = null;
+        try {
+            sbdhInputStream = new FileInputStream(sbdhFile);
+        } catch (FileNotFoundException e) {
+            throw new IllegalStateException("Unable to open file " + sbdhFile + " " + e.getMessage(), e);
+        }
+
+        // Parses the SBDH
+        StandardBusinessDocumentHeader sbdh = sbdhParser.parse(sbdhInputStream);
+
+        // Adds the SBDH
+
+        // Adds the main UBL XML document
+        if (sbdh.getManifest().getNumberOfItems().longValue() > Integer.MAX_VALUE) {
+            throw new IllegalStateException("Too many Manifest items: " + sbdh.getManifest().getNumberOfItems().longValue() + " only " + Integer.MAX_VALUE + " allowed");
+        }
+
+        for (int itemCount = 0; itemCount < sbdh.getManifest().getNumberOfItems().intValue(); itemCount++) {
+
+            ManifestItem manifestItem = sbdh.getManifest().getManifestItem().get(itemCount);
+
+            String documentName = manifestItem.getUniformResourceIdentifier().replace("cid:", "");
+            File documentFile = new File(sbdhFile.getParentFile().getAbsolutePath(), documentName);
+
+            try {
+                asicWriter.add(documentFile, documentName, MimeType.forString(manifestItem.getMimeTypeQualifierCode()));
+            } catch (IOException e) {
+                throw new IllegalStateException("Unable to add " + documentFile + " to asic archive with entry name " + documentName + ". " + e.getMessage(), e);
+            }
+
+            if (itemCount == 0) {
+                asicWriter.setRootEntryName(documentName);
+            }
+        }
+
+        // Adds the attachments
+
+        try {
+            asicWriter.sign(signatureHelper);
+        } catch (IOException e) {
+            throw new IllegalStateException("Unable to sign contents of " + sbdhFile + ". " + e.getMessage(), e);
+        }
+
+    }
 }

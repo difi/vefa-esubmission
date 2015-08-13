@@ -26,13 +26,22 @@ import no.difi.asic.AsicWriter;
 import no.difi.asic.AsicWriterFactory;
 import no.difi.asic.MimeType;
 import no.difi.asic.SignatureHelper;
+import org.apache.commons.io.FileUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.testng.annotations.Test;
 import org.unece.cefact.namespaces.standardbusinessdocumentheader.ManifestItem;
 import org.unece.cefact.namespaces.standardbusinessdocumentheader.StandardBusinessDocumentHeader;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.nio.file.Files;
+
+import static org.testng.Assert.assertTrue;
+import static org.testng.Assert.fail;
 
 /**
  * @author steinar
@@ -41,41 +50,33 @@ import java.net.URL;
  */
 public class SbdhAsicCreatorTest {
 
+    public static final Logger log = LoggerFactory.getLogger(SbdhAsicCreatorTest.class);
     @Test
     public void createFromSampleSbdh() throws Exception {
 
-        InputStream sbdhStream = SbdhAsicCreatorTest.class.getClassLoader().getResourceAsStream("sbdh-peppol-sample-v1.3.xml");
+        String resources[] = {
+            "sbdh-peppol-sample-v1.3.xml",
+            "trdm090-submit-tender-sample.xml",
+            "sample-readme.txt"
+        };
+
+
+        File sbdhDir = Util.createTempdir();
+        for (String resource : resources) {
+            InputStream sbdhStream = SbdhAsicCreatorTest.class.getClassLoader().getResourceAsStream(resource);
+            File file = new File(sbdhDir, resource);
+            FileUtils.copyInputStreamToFile(sbdhStream, file);
+        }
+
 
         SignatureHelper signatureHelper = new SignatureHelper(KeyStoreUtil.sampleKeyStoreStream(), KeyStoreUtil.getKeyStorePassword(), KeyStoreUtil.getKeyStoreAlias(), KeyStoreUtil.getPrivateKeyPassord());
 
-        AsicWriter asicWriter = AsicWriterFactory.newFactory().newContainer(new File(CmdLineOptions.VEFA_INNLEVERING_ASICE));
+        SbdhAsicCreator sbdhAsicCreator = new SbdhAsicCreator(signatureHelper);
 
-        SbdhParser sbdhParser = new SbdhParser();
-        StandardBusinessDocumentHeader sbdh = sbdhParser.parse(sbdhStream);
+        File asicFile = File.createTempFile("vefa-innlevering-", ".asice");
+        sbdhAsicCreator.createFrom(new File(sbdhDir,"sbdh-peppol-sample-v1.3.xml"), asicFile);
 
-        // Adds the SBDH
-
-        // Adds the main UBL XML document
-        if (sbdh.getManifest().getNumberOfItems().longValue() > Integer.MAX_VALUE) {
-            throw new IllegalStateException("Too many Manifest items: " + sbdh.getManifest().getNumberOfItems().longValue() + " only " + Integer.MAX_VALUE + " allowed");
-        }
-
-        for (int itemCount = 0; itemCount < sbdh.getManifest().getNumberOfItems().intValue(); itemCount++) {
-
-            ManifestItem manifestItem = sbdh.getManifest().getManifestItem().get(itemCount);
-
-            String documentName = manifestItem.getUniformResourceIdentifier().replace("cid:", "");
-            InputStream mainDocumentInputStream = SbdhAsicCreatorTest.class.getClassLoader().getResourceAsStream(documentName);
-            asicWriter.add(mainDocumentInputStream, documentName, MimeType.forString(manifestItem.getMimeTypeQualifierCode()));
-
-            if (itemCount == 0) {
-                asicWriter.setRootEntryName(documentName);
-            }
-        }
-
-        // Adds the attachments
-
-        asicWriter.sign(signatureHelper);
+        log.debug("Created " + asicFile);
 
     }
 }
