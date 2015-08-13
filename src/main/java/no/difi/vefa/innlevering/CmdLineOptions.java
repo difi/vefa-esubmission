@@ -1,34 +1,23 @@
 /*
- *  Copyright (c) 2015,  Norwegian Agency for Public Management and eGovernment (Difi)
+ * Copyright (c) 2015, Norwegian Agency for Public Management and eGovernment (Difi)
  *
- *  Author according to Norwegian Copyright act §3: Steinar Overbeck Cook
+ * Author according to Norwegian Copyright act paragraph no. 3: Steinar Overbeck Cook
  *
- *  All rights reserved.
+ * This file is part of vefa-innlevering.
  *
- *  Redistribution and use in source and binary forms, with or without modification,
- *  are permitted provided that the following conditions are met:
+ * vefa-innlevering is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
  *
- *  · Redistributions of source code must retain the above copyright notice, this
- *  list of conditions and the following disclaimer.
+ * vefa-innlevering is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
  *
- *  · Redistributions in binary form must reproduce the above copyright notice, this
- *  list of conditions and the following disclaimer in the documentation and/or
- *  other materials provided with the distribution.
- *
- *  · Neither the name of the <ORGANIZATION> nor the names of its contributors may
- *  be used to endorse or promote products derived from this software without
- *  specific prior written permission.
- *
- *  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
- *  ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
- *  WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
- *  DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR
- *  ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
- *  (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
- *  LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
- *  ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- *  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
- *  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with vefa-innlevering. See the files COPYING and COPYING.LESSER.
+ * If not, see <http://www.gnu.org/licenses/>.
  */
 
 package no.difi.vefa.innlevering;
@@ -70,11 +59,23 @@ public class CmdLineOptions {
     private List<File> attachments = new ArrayList<File>();
 
     /**
-     * The main XML BIS document to be inserted into the ASiC archive. The value "test" indicates to use whatever
+     * Parse the supplied SBDH and create ASiC based upon the contents of the SBDH
+     */
+    @Option(name="-sbdh", aliases = {"-auto"}, usage="Creates ASiC based upon contents of SBDH file.", metaVar = "<file>", forbids = {"-bis","-ubl","-scan","-a"})
+    File sbdhFile = null;
+
+    /**
+     * Create ASiC manually using supplied XML BIS document to be inserted into the ASiC archive. The value "test" indicates to use whatever
      * XML document has been included in the distribution.
      */
-    @Option(name = "-b", aliases = {"-bis"}, usage="Name of main XML BIS file",metaVar = "<file>",required = true, forbids={"-d"})
+    @Option(name = "-bis", aliases = {"-ubl"}, usage="Name of main XML BIS file",metaVar = "<file>",forbids={"-scan"})
     File bisFileName = null;
+
+    /**
+     * Directory to be scanned for SBDH files
+     */
+    @Option(name="-scan", aliases = {"-dir"},usage = "Directory to scan for XML files", metaVar = "<dirname>",forbids={"-bis","-ubl","-sbdh","-a"})
+    private File scanDirectory;
 
     /**
      * The keystore holding the private and public key together with any certificates.
@@ -89,8 +90,6 @@ public class CmdLineOptions {
     @Option(name="-pp",usage = "Private key password if different from keystore password.", metaVar = "<privateKeyPassoword>")
     private String privateKeyPassword;
 
-    @Option(name="-d",aliases = {"-dir"},usage = "Directory to scan for XML files", metaVar = "<dirname>",forbids="-bis")
-    private File outputDirectory;
 
     @Option(name = "-h", aliases = {"-?", "-help"}, usage = "Print help.", help = true)
     Boolean help = false;
@@ -101,10 +100,14 @@ public class CmdLineOptions {
         archiveFileName = fileName;
     }
 
-    @Option(name="-a",aliases = {"-attachment"}, usage="Name of attachment files. May be repeated.",metaVar = "<filename>")
+    @Option(name="-a", usage="Name of attachment files. May be repeated.",metaVar = "<filename>")
     public void setAttachments(File attachment) {
         log.debug("Adding " + attachment + " to list of files to be attached");
         this.attachments.add(attachment);
+    }
+
+    public File getSbdhFile() {
+        return sbdhFile;
     }
 
     public File getArchiveFileName() {
@@ -127,8 +130,8 @@ public class CmdLineOptions {
         return privateKeyPassword;
     }
 
-    public File getOutputDirectory() {
-        return outputDirectory;
+    public File getScanDirectory() {
+        return scanDirectory;
     }
 
     public Boolean getHelp() {
@@ -140,5 +143,20 @@ public class CmdLineOptions {
     }
 
 
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("CmdLineOptions{");
+        sb.append("archiveFileName=").append(archiveFileName);
+        sb.append(", attachments=").append(attachments);
+        sb.append(", sbdhFile=").append(sbdhFile);
+        sb.append(", bisFileName=").append(bisFileName);
+        sb.append(", scanDirectory=").append(scanDirectory);
+        sb.append(", keyStoreFile=").append(keyStoreFile);
+        sb.append(", keystorePassword='").append(keystorePassword).append('\'');
+        sb.append(", privateKeyPassword='").append(privateKeyPassword).append('\'');
+        sb.append(", help=").append(help);
+        sb.append('}');
+        return sb.toString();
+    }
 }
 

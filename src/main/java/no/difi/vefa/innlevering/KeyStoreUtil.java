@@ -22,37 +22,39 @@
 
 package no.difi.vefa.innlevering;
 
-import org.kohsuke.args4j.CmdLineParser;
-import org.kohsuke.args4j.ExampleMode;
-import org.kohsuke.args4j.OptionHandlerFilter;
-
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
+import java.io.InputStream;
 
 /**
- * Provides the famous "usage" message for this component.
- *
  * @author steinar
- *         Date: 11.08.15
- *         Time: 13.06
+ *         Date: 13.08.15
+ *         Time: 14.59
  */
-class Usage {
+public class KeyStoreUtil {
 
-    static public void usage(OutputStream outputStream, CmdLineParser cmdLineParser, String message) {
 
-        OutputStreamWriter outputStreamWriter = new OutputStreamWriter(outputStream);
-        PrintWriter writer = new PrintWriter(outputStreamWriter);
+    public static final String VEFA_INNLEVERING_JKS = "vefa-innlevering.jks";
+    private static String keyStorePassword = "changeit";
+    private static String keyStoreAlias = null;
+    private static String privateKeyPassord = "changeit";
 
-        writer.println();
-        writer.println(message);
-        writer.println();
+    public static InputStream sampleKeyStoreStream() {
+        InputStream resourceAsStream = KeyStoreUtil.class.getClassLoader().getResourceAsStream(VEFA_INNLEVERING_JKS);
+        if (resourceAsStream == null) {
+            throw new IllegalStateException("Unable to load internally provided keystore from " + VEFA_INNLEVERING_JKS);
+        }
 
-        writer.println("java -jar vefa-innlevering.jar [options...]");
-        writer.flush();
-        cmdLineParser.printUsage(outputStream);
-        writer.println();
-        writer.println(" Example: java -jar vefa-innlevering.jar -bis trdm090.xml" + cmdLineParser.printExample(OptionHandlerFilter.ALL));
-        writer.flush();
+        return resourceAsStream;
+    }
+
+    public static String getKeyStorePassword() {
+        return keyStorePassword;
+    }
+
+    public static String getKeyStoreAlias() {
+        return keyStoreAlias;
+    }
+
+    public static String getPrivateKeyPassord() {
+        return privateKeyPassord;
     }
 }

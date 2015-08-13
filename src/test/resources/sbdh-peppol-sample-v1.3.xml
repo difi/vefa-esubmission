@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+  ~ Copyright (c) 2015, Norwegian Agency for Public Management and eGovernment (Difi)
+  ~
+  ~ Author according to Norwegian Copyright act paragraph no. 3: Steinar Overbeck Cook
+  ~
+  ~ This file is part of vefa-innlevering.
+  ~
+  ~ vefa-innlevering is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU Lesser General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ vefa-innlevering is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU Lesser General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Lesser General Public License
+  ~ along with vefa-innlevering. See the files COPYING and COPYING.LESSER.
+  ~ If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<StandardBusinessDocumentHeader xmlns:xs="http://www.w3.org/2001/XMLSchema"
+                                xmlns="http://www.unece.org/cefact/namespaces/StandardBusinessDocumentHeader">
+    <HeaderVersion>1.0</HeaderVersion>
+    <Sender>
+        <Identifier Authority="iso6523-actorid-upis">9908:810018902</Identifier>
+    </Sender>
+    <Receiver>
+        <Identifier Authority="iso6523-actorid-upis">9908:810418052</Identifier>
+    </Receiver>
+    <DocumentIdentification>
+        <Standard>urn:oasis:names:specification:ubl:schema:xsd:ExpressionOfInterest</Standard>
+        <TypeVersion>2.1</TypeVersion>
+        <InstanceIdentifier>FA4A6819-6149-4134-95C3-C53A65338EB6</InstanceIdentifier>
+        <Type>ExpressionOfInterest</Type>
+        <CreationDateAndTime>2015-07-26T20:08:00+01:00</CreationDateAndTime>
+    </DocumentIdentification>
+    <Manifest>
+        <NumberOfItems>2</NumberOfItems>
+        <ManifestItem>
+            <MimeTypeQualifierCode>application/xml</MimeTypeQualifierCode>
+            <UniformResourceIdentifier>cid:trdm090-submit-tender-sample.xml</UniformResourceIdentifier>
+            <Description>The main UBL XML document</Description>
+        </ManifestItem>
+        <ManifestItem>
+            <MimeTypeQualifierCode>text/plain</MimeTypeQualifierCode>
+            <UniformResourceIdentifier>cid:sample-readme.txt</UniformResourceIdentifier>
+            <Description>A sample attachment</Description>
+        </ManifestItem>
+    </Manifest>
+
+    <BusinessScope>
+
+        <Scope>
+            <Type>PROCESSID</Type>
+            <InstanceIdentifier>urn:www.cenbii.eu:profile:bii46:ver3.0</InstanceIdentifier>
+        </Scope>
+        <Scope>
+            <Type>DOCUMENTID</Type>
+            <InstanceIdentifier>
+                urn:oasis:names:specification:ubl:schema:xsd:ExpressionOfInterest::ExpressionOfInterest##urn:www.cenbii.eu:transaction:biitrdm081:ver3.0::2.1
+            </InstanceIdentifier>
+        </Scope>
+    </BusinessScope>
+</StandardBusinessDocumentHeader>
