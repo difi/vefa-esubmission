@@ -40,7 +40,7 @@ import static org.testng.Assert.assertNotNull;
 public class SbdhParserTest {
 
 
-    public static final String SBDH_SAMPLE_RESOURCE = "sbdh-peppol-sample-v1.3.xml";
+    public static final String SBDH_SAMPLE_RESOURCE = Util.SAMPLE_SBDH_RESOURCE;
 
     @Test
     public void parseSampleSbdh() throws Exception {

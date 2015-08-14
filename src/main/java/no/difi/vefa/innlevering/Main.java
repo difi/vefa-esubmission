@@ -28,6 +28,8 @@ import org.kohsuke.args4j.CmdLineParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.File;
+
 /**
  *
  *
@@ -50,9 +52,12 @@ public class Main {
                     ManualAsicCreator manualAsicCreator = new ManualAsicCreator(executionOptions, signatureHelper);
                     manualAsicCreator.createAsicFile();
                     break;
-                case SBDH:
 
+                case SBDH:
+                    SbdhAsicCreator sbdhAsicCreator = new SbdhAsicCreator(signatureHelper);
+                    File asicFile = sbdhAsicCreator.createAsicFile(executionOptions);
                     break;
+
                 case SCAN:
                     throw new IllegalArgumentException("No support for directory scanning in this version");
             }

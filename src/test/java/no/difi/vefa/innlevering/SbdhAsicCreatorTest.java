@@ -22,23 +22,17 @@
 
 package no.difi.vefa.innlevering;
 
-import no.difi.asic.AsicWriter;
-import no.difi.asic.AsicWriterFactory;
-import no.difi.asic.MimeType;
 import no.difi.asic.SignatureHelper;
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.annotations.Test;
-import org.unece.cefact.namespaces.standardbusinessdocumentheader.ManifestItem;
-import org.unece.cefact.namespaces.standardbusinessdocumentheader.StandardBusinessDocumentHeader;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
-import java.nio.file.Files;
+import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 
 import static org.testng.Assert.assertTrue;
 import static org.testng.Assert.fail;
@@ -51,32 +45,69 @@ import static org.testng.Assert.fail;
 public class SbdhAsicCreatorTest {
 
     public static final Logger log = LoggerFactory.getLogger(SbdhAsicCreatorTest.class);
+
+    /**
+     * Extracts the resources embedded in the project into an external directory, after which the SBDH is parsed and
+     * an ASiC archive is created based upon the contents of the SBDH.
+     *
+     * @throws Exception
+     */
     @Test
     public void createFromSampleSbdh() throws Exception {
 
         String resources[] = {
-            "sbdh-peppol-sample-v1.3.xml",
-            "trdm090-submit-tender-sample.xml",
-            "sample-readme.txt"
+                Util.SAMPLE_SBDH_RESOURCE,  // The SBDH, which contains the references to the next two files.
+                "trdm090-submit-tender-sample.xml",
+                "sample-readme.txt"
         };
 
 
-        File sbdhDir = Util.createTempdir();
+        // Creates a temporary directory in which we will place the SBDH together with the referenced files.
+        File sbdhDir = Util.createUniqueTempdir();
+
+        // Iterates over each resource and copies them to the temporary directory
         for (String resource : resources) {
             InputStream sbdhStream = SbdhAsicCreatorTest.class.getClassLoader().getResourceAsStream(resource);
             File file = new File(sbdhDir, resource);
             FileUtils.copyInputStreamToFile(sbdhStream, file);
         }
 
-
+        // Establish the SignatureHelper to be used by the SbdhAsicCreator
         SignatureHelper signatureHelper = new SignatureHelper(KeyStoreUtil.sampleKeyStoreStream(), KeyStoreUtil.getKeyStorePassword(), KeyStoreUtil.getKeyStoreAlias(), KeyStoreUtil.getPrivateKeyPassord());
 
         SbdhAsicCreator sbdhAsicCreator = new SbdhAsicCreator(signatureHelper);
 
+        // Temporary file in which the ASiC archive will be created
         File asicFile = File.createTempFile("vefa-innlevering-", ".asice");
-        sbdhAsicCreator.createFrom(new File(sbdhDir,"sbdh-peppol-sample-v1.3.xml"), asicFile);
+
+        // Compute the full path name of the SBDH to be parsed
+        File sbdhFile = new File(sbdhDir, Util.SAMPLE_SBDH_RESOURCE);
+
+        // Creates the ASiC archive
+        sbdhAsicCreator.createFrom(sbdhFile, asicFile);
+
+        assertTrue(sbdhFile.canRead(), sbdhFile + " not readable");
+        assertTrue(asicFile.exists() && asicFile.canRead(), asicFile + " not readable or does not exist");
+
+        // Verifies the contents of the ASiC archive
+        ZipInputStream zipInputStream = new ZipInputStream(new FileInputStream(asicFile));
+
+        ZipEntry zipEntry = null;
+        List<String> entries = new ArrayList<>();
+
+        while ((zipEntry = zipInputStream.getNextEntry()) != null) {
+            entries.add(zipEntry.getName());
+        }
+
+        for (String resourceName : resources) {
+            // The SBDH file is always entered into the archive with the same name
+            if (resourceName.equals(Util.SAMPLE_SBDH_RESOURCE)) {
+                assertTrue(entries.contains(SbdhAsicCreator.STANDARD_NAME_FOR_SBDH_XML));
+            } else {
+                assertTrue(entries.contains(resourceName), resourceName + " not found in generated ASiC archive");
+            }
+        }
 
         log.debug("Created " + asicFile);
-
     }
 }

@@ -17,6 +17,15 @@ dependencies, is available in the current directory.
 
 Furthermore, the `java` command must be available.
 
+### Create ASiC archive based on the contents of SBDH
+
+Creates a sample ASiC archive containing the test documents provided in this implementation.
+The signature is created using the supplied test certificates.
+
+    java-jar vefa-innlevering.jar -sbdh test -keystore test
+
+The sbdh file is included as part of the signed contents of the ASiC archive.
+
 ### Creating a single ASiC archive using the supplied test resources
 `vefa-innlevering` comes with some test files and a test certificate and henceforth, we courteously supply you
 with the ability to create test messages:

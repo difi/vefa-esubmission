@@ -22,8 +22,11 @@
 
 package no.difi.vefa.innlevering;
 
+import org.apache.commons.io.FileUtils;
+
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Date;
 
 /**
@@ -33,13 +36,17 @@ import java.util.Date;
  */
 public class Util {
 
-    public static File createTempdir() {
+    public static final String SAMPLE_SBDH_RESOURCE = "sbdh-peppol-sample-v1.3.xml";
+    public static final String SAMPLE_UBL_DOCUMENT = "trdm090-submit-tender-sample.xml";
+    public static final java.lang.String SAMPLE_ATTACHMENT = "sample-readme.txt";
+
+    public static File createUniqueTempdir() {
         String tmpDirName = System.getProperty("java.io.tmpdir");
 
         File sbdhDir = null;
 
         Date now = new Date();
-        String dirName = String.format("vefa-innlevering-%tFT%tH%tM%tS", now,now,now,now);
+        String dirName = String.format("vefa-innlevering-%tFT%tH%tM%tS", now, now, now, now);
         sbdhDir = new File(tmpDirName, dirName);
 
         if (!sbdhDir.mkdir()) {
@@ -47,4 +54,23 @@ public class Util {
         }
         return sbdhDir;
     }
+
+    public static File extractResourceToTempDir(String resourceName) {
+        File tempdir = Util.createUniqueTempdir();
+
+        return extractResourceToTempDir(resourceName, tempdir);
+    }
+
+    public static File extractResourceToTempDir(String resourceName, File tempdir) {
+        File resourceFile = new File(tempdir, resourceName);
+        InputStream resourceAsStream = Util.class.getClassLoader().getResourceAsStream(Util.SAMPLE_SBDH_RESOURCE);
+        try {
+            FileUtils.copyInputStreamToFile(resourceAsStream, resourceFile);
+        } catch (IOException e) {
+            throw new IllegalStateException("Unable to copy internal resource " + Util.SAMPLE_SBDH_RESOURCE + " to temp dir " + tempdir);
+        }
+
+        return resourceFile;
+    }
+
 }

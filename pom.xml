@@ -35,10 +35,10 @@
     <inceptionYear>2015</inceptionYear>
     <licenses>
         <license>
-            <name>BSD 3-clause License</name>
-            <url>http://opensource.org/licenses/BSD-3-Clause</url>
+            <name>LGP</name>
+            <url>http://www.gnu.org/licenses/lgpl.txt</url>
             <distribution>repo</distribution>
-            <comments>The</comments>
+            <comments>The GNU LGPL applies to this component</comments>
         </license>
     </licenses>
     <organization>

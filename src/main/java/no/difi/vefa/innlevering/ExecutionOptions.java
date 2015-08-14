@@ -35,8 +35,9 @@ import static no.difi.vefa.innlevering.CmdLineOptions.TEST_FLAG;
  */
 public class ExecutionOptions {
 
-    public enum ExecMode { SBDH, MANUAL, SCAN}
 
+
+    public enum ExecMode { SBDH, MANUAL, SCAN;}
     public static final String TRDM090_SUBMIT_TENDER_SAMPLE_XML = "trdm090-submit-tender-sample.xml";
 
     private CmdLineOptions options;
@@ -45,7 +46,6 @@ public class ExecutionOptions {
 
         this.options = options;
     }
-
 
     public InputStream getKeyStoreStream() {
         InputStream keyStoreInputStream;
@@ -64,6 +64,7 @@ public class ExecutionOptions {
         }
         return keyStoreInputStream;
     }
+
 
     private boolean isTestKeystoreBeingUsed() {
         return TEST_FLAG.equals(options.getKeyStoreFile().getName().toLowerCase());
@@ -124,9 +125,20 @@ public class ExecutionOptions {
             return options.getBisFileName().getName();
     }
 
+    /** Indicates if the user has specified some form of the string "test" as the BIS file */
     public boolean isInternalTestBisFileBeingUsed() {
         return  (TEST_FLAG.equals(getBisFileName().getName().toLowerCase()));
     }
+
+    public File getSbdhFile() {
+        return options.getSbdhFile();
+    }
+
+    /** Indicates whether the user specified <code>-sbdh test</code> on the command line */
+    public boolean isInternalTestSbdhBeingUsed() {
+        return (TEST_FLAG.equals(getSbdhFile().getName().toLowerCase()));
+    }
+
 
     public ExecMode getExecutionMode() {
         if (options.getSbdhFile() != null) {
