@@ -63,11 +63,11 @@ public class Util {
 
     public static File extractResourceToTempDir(String resourceName, File tempdir) {
         File resourceFile = new File(tempdir, resourceName);
-        InputStream resourceAsStream = Util.class.getClassLoader().getResourceAsStream(Util.SAMPLE_SBDH_RESOURCE);
+        InputStream resourceAsStream = Util.class.getClassLoader().getResourceAsStream(resourceName);
         try {
             FileUtils.copyInputStreamToFile(resourceAsStream, resourceFile);
         } catch (IOException e) {
-            throw new IllegalStateException("Unable to copy internal resource " + Util.SAMPLE_SBDH_RESOURCE + " to temp dir " + tempdir);
+            throw new IllegalStateException("Unable to copy internal resource " + resourceName + " to temp dir " + tempdir);
         }
 
         return resourceFile;

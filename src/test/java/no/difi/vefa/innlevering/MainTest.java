@@ -40,7 +40,7 @@ public class MainTest {
     public void setUp() {
         File file = new File(CmdLineOptions.VEFA_INNLEVERING_ASICE);
         if (file.exists()) {
-            file.delete();
+             file.delete();
         }
     }
 
@@ -72,7 +72,7 @@ public class MainTest {
     public void after() {
         File file = new File(CmdLineOptions.VEFA_INNLEVERING_ASICE);
         assertTrue(file.canRead(), "Seems that the file vefa-innlevering.asice was not created");
-        file.delete();
+        // file.delete();
     }
 
 }

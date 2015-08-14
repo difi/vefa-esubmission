@@ -162,6 +162,7 @@ class SbdhAsicCreator {
             }
 
             try {
+                log.debug("Adding " + documentFile);
                 asicWriter.add(documentFile, documentName, MimeType.forString(manifestItem.getMimeTypeQualifierCode()));
             } catch (IOException e) {
                 throw new IllegalStateException("Unable to add " + documentFile + " to asic archive with entry name " + documentName + ". " + e.getMessage(), e);

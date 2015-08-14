@@ -32,10 +32,10 @@
         <Identifier Authority="iso6523-actorid-upis">9908:810418052</Identifier>
     </Receiver>
     <DocumentIdentification>
-        <Standard>urn:oasis:names:specification:ubl:schema:xsd:ExpressionOfInterest</Standard>
+        <Standard>urn:oasis:names:specification:ubl:schema:xsd:Tender-2</Standard>
         <TypeVersion>2.1</TypeVersion>
         <InstanceIdentifier>FA4A6819-6149-4134-95C3-C53A65338EB6</InstanceIdentifier>
-        <Type>ExpressionOfInterest</Type>
+        <Type>Tender</Type>
         <CreationDateAndTime>2015-07-26T20:08:00+01:00</CreationDateAndTime>
     </DocumentIdentification>
     <Manifest>
@@ -61,7 +61,7 @@
         <Scope>
             <Type>DOCUMENTID</Type>
             <InstanceIdentifier>
-                urn:oasis:names:specification:ubl:schema:xsd:ExpressionOfInterest::ExpressionOfInterest##urn:www.cenbii.eu:transaction:biitrdm081:ver3.0::2.1
+                urn:oasis:names:specification:ubl:schema:xsd:Tender-2::Tender##urn:www.cenbii.eu:transaction:biitrdm090:ver3.0::2.1
             </InstanceIdentifier>
         </Scope>
     </BusinessScope>
