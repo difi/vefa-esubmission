@@ -24,7 +24,6 @@ There are three modes of operation:
                  |-- manifest.xml
                  |-- signature-2009bda5-f28e-4302-8350-fb7589b83bd7.p7s
 
-
   1. Create ASiC archive manually, specifying each and every file to be included.
 
         java -jar vefa-innlevering.jar -sbdh <filename> -bis <filename> -a <attachment> \
