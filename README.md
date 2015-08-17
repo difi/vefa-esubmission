@@ -110,3 +110,5 @@ Note! This feature has not yet been implemented.
 
     java -jar vefa-innlevering.jar -d directory_name -out directory_name \
          -keystore keystore.jks -ksp keystore_password -pkp private_key_password
+
+This feature has not been implemented yet.
