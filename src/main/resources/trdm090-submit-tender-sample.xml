@@ -44,20 +44,33 @@
         <cbc:VersionID>1</cbc:VersionID>
         <cbc:DocumentDescription>Call for tender referanse</cbc:DocumentDescription>
     </cac:DocumentReference>
+
     <cac:DocumentReference>
-        <cbc:ID>TEN345</cbc:ID>
+        <cbc:ID>SAMP-42</cbc:ID>
+        <cbc:IssueDate>2015-08-17</cbc:IssueDate>
         <cbc:DocumentTypeCode>TEN</cbc:DocumentTypeCode>
+        <cbc:DocumentType>Tender</cbc:DocumentType>
+        <cbc:LanguageID>EN</cbc:LanguageID>
+        <cbc:LocaleCode>NO</cbc:LocaleCode>
+        <cbc:VersionID>1.0</cbc:VersionID>
         <cbc:DocumentDescription>Provided tender document</cbc:DocumentDescription>
         <cac:Attachment>
             <cac:ExternalReference>
-                <cbc:DocumentHash>de9f2c7fd25e1b3afad3e85a0bd17d9b100db4b3</cbc:DocumentHash>
-                <cbc:HashAlgorithmMethod>SHA-1</cbc:HashAlgorithmMethod>
-                <cbc:FileName>Filnavn</cbc:FileName>
+                <!-- CID according to RFC2392 -->
+                <cbc:URI>cid:sample-readme.txt</cbc:URI>
+                <cbc:MimeCode>text/plain</cbc:MimeCode>
+                <cbc:FileName>sample-readme.txt</cbc:FileName>
+                <cbc:Description>Sample text attachment</cbc:Description>
             </cac:ExternalReference>
         </cac:Attachment>
+        <cac:ValidityPeriod>
+            <cbc:StartDate>2015-08-01</cbc:StartDate>
+            <cbc:EndDate>2015-09-30</cbc:EndDate>
+        </cac:ValidityPeriod>
     </cac:DocumentReference>
+
     <cac:TendererParty>
-        <!--EndpointID bør rettes til den reelle part som deltar i testen-->
+        <!--EndpointID MÅ rettes til den reelle part som deltar i testen-->
         <cbc:EndpointID schemeID="NO:ORGNR">999888777</cbc:EndpointID>
         <cac:PartyIdentification>
             <cbc:ID schemeID="ZZZ">T12345678</cbc:ID>

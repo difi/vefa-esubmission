@@ -51,12 +51,34 @@ Furthermore, the `java` command must be available.
 
 ### Create ASiC archive based on the contents of SBDH
 
-Creates a sample ASiC archive containing the test documents provided in this implementation.
+Creates a sample ASiC archive containing the test documents provided in this implementation. The contents of the
+ASiC archive, i.e. the files to be included are specified in the `<Manifest>` element of the SBDH:
+
+```xml
+        <Manifest>
+            <NumberOfItems>2</NumberOfItems>
+            <ManifestItem>
+                <MimeTypeQualifierCode>application/xml</MimeTypeQualifierCode>
+                <!-- First reference is always the main BIS XML document, which may or may not -->
+                <!-- reference attachments -->
+                <UniformResourceIdentifier>cid:trdm090-submit-tender-sample.xml</UniformResourceIdentifier>
+                <Description>The main UBL XML document</Description>
+            </ManifestItem>
+            <ManifestItem>
+                <!-- Include this file in the ASiC archive as an attachment -->
+                <MimeTypeQualifierCode>text/plain</MimeTypeQualifierCode>
+                <UniformResourceIdentifier>cid:sample-readme.txt</UniformResourceIdentifier>
+                <Description>A sample attachment</Description>
+            </ManifestItem>
+        </Manifest>
+```
+
 The signature is created using the supplied test certificates.
 
     java-jar vefa-innlevering.jar -sbdh test -keystore test
 
 The sbdh file is included as part of the signed contents of the ASiC archive.
+
 
 ### Creating a single ASiC archive using the supplied test resources
 `vefa-innlevering` comes with some test files and a test certificate and henceforth, we courteously supply you
@@ -65,6 +87,9 @@ with the ability to create test messages:
     # Creates ASiC archive named 'vefa-innlevering.asice' in current directory
     java -jar vefa-innlevering.jar -bis test -keystore test
 
+The resulting ASiC archive will only containt the sample BIS XML file: `trdm090-submit-tender-sample.xml`. I.e.
+no SBDH will be included, nor will any attahcments be included.
+
 ### Creating a single ASiC archive
 This is how you create an ASiC archive from the file `trdm090.xml`:
     # Input files: trdm090 (main document) and brochure.pdf (attachment)
@@ -72,6 +97,9 @@ This is how you create an ASiC archive from the file `trdm090.xml`:
 
     java -jar vefa-innlevering.jar -o message42.asice -bis trdm090.xml -a brochure.pdf \
          -keystore keystore.jks -ksp keystore_password -pkp private_key_password
+
+The resulting ASiC archive will contain `trdom090.xml` (marked as the Rootfile in `META-INF/asicmanifest.xml`)
+ and `brochure.pdf`.
 
 ### Creating multiple ASiC archives
 A directory is scanned, and for each XML file found, an ASiC archive is created.
