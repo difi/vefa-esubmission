@@ -49,7 +49,7 @@ public class Util {
         String dirName = String.format("vefa-innlevering-%tFT%tH%tM%tS", now, now, now, now);
         sbdhDir = new File(tmpDirName, dirName);
 
-        if (!sbdhDir.mkdir()) {
+        if (!sbdhDir.exists() && !sbdhDir.mkdir()) {
             throw new IllegalStateException("Unable to create directory " + sbdhDir);
         }
         return sbdhDir;
