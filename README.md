@@ -1,4 +1,4 @@
-# vefa-innlevering - shared component for creating ASiC-based eSubmission messages
+# vefa-esubmission - shared component for creating ASiC-based eSubmission messages
 
 The purpose of this component is to create valid eSubmission messages suitable for
 the PEPPOL network.
@@ -8,7 +8,7 @@ There are three modes of operation:
   1. Create ASiC archive based upon the contents of an SBDH in a XML file. This
      is the recommended way of doing it.
 
-         java -jar vefa-innlevering.jar -sbdh <filename> -ks <keystore> -ksp <keystore password> \
+         java -jar vefa-esubmission.jar -sbdh <filename> -ks <keystore> -ksp <keystore password> \
              -pp <private key password>
 
      You should end up with an ASiC archive looking like this (the order is not important):
@@ -26,7 +26,7 @@ There are three modes of operation:
 
   1. Create ASiC archive manually, specifying each and every file to be included.
 
-        java -jar vefa-innlevering.jar -sbdh <filename> -bis <filename> -a <attachment> \
+        java -jar vefa-esubmission.jar -sbdh <filename> -bis <filename> -a <attachment> \
              -ks <keystorefile> -ksp <keystore password> -pp <private key password>
 
   1. Scan a directory and create ASiC archives for each SBDH file found.
@@ -44,7 +44,7 @@ The process of creating an eSubmission message in ASiC archives goes like this:
 
 ## Example command lines
 
-The examples below assumes that the Java jar file `vefa-innlevering.jar`, holding the complete distribution, i.e. with
+The examples below assumes that the Java jar file `vefa-esubmission.jar`, holding the complete distribution, i.e. with
 dependencies, is available in the current directory.
 
 Furthermore, the `java` command must be available.
@@ -75,17 +75,17 @@ ASiC archive, i.e. the files to be included are specified in the `<Manifest>` el
 
 The signature is created using the supplied test certificates.
 
-    java-jar vefa-innlevering.jar -sbdh test -keystore test
+    java-jar vefa-esubmission.jar -sbdh test -keystore test
 
 The sbdh file is included as part of the signed contents of the ASiC archive.
 
 
 ### Creating a single ASiC archive using the supplied test resources
-`vefa-innlevering` comes with some test files and a test certificate and henceforth, we courteously supply you
+`vefa-esubmission` comes with some test files and a test certificate and henceforth, we courteously supply you
 with the ability to create test messages:
 
-    # Creates ASiC archive named 'vefa-innlevering.asice' in current directory
-    java -jar vefa-innlevering.jar -bis test -keystore test
+    # Creates ASiC archive named 'vefa-esubmission.asice' in current directory
+    java -jar vefa-esubmission.jar -bis test -keystore test
 
 The resulting ASiC archive will only containt the sample BIS XML file: `trdm090-submit-tender-sample.xml`. I.e.
 no SBDH will be included, nor will any attahcments be included.
@@ -95,7 +95,7 @@ This is how you create an ASiC archive from the file `trdm090.xml`:
     # Input files: trdm090 (main document) and brochure.pdf (attachment)
     # Output: message42.asice
 
-    java -jar vefa-innlevering.jar -o message42.asice -bis trdm090.xml -a brochure.pdf \
+    java -jar vefa-esubmission.jar -o message42.asice -bis trdm090.xml -a brochure.pdf \
          -keystore keystore.jks -ksp keystore_password -pkp private_key_password
 
 The resulting ASiC archive will contain `trdom090.xml` (marked as the Rootfile in `META-INF/asicmanifest.xml`)
@@ -108,7 +108,7 @@ Note! This feature has not yet been implemented.
 
 ### Iterates all XML files in directory_name and creates corresponding messages
 
-    java -jar vefa-innlevering.jar -d directory_name -out directory_name \
+    java -jar vefa-esubmission.jar -d directory_name -out directory_name \
          -keystore keystore.jks -ksp keystore_password -pkp private_key_password
 
 This feature has not been implemented yet.

@@ -1,9 +1,9 @@
 # Created by .ignore support plugin (hsz.mobi)
 ### Java template
 *.class
-/vefa-innlevering
-vefa-innlevering.asice
-vefa-innlevering.log
+/vefa-esubmission
+vefa-esubmission.asice
+vefa-esubmission.log
 .idea
 target
 .settings
