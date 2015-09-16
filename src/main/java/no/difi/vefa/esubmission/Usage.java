@@ -21,10 +21,9 @@
  *
  */
 
-package no.difi.vefa.innlevering;
+package no.difi.vefa.esubmission;
 
 import org.kohsuke.args4j.CmdLineParser;
-import org.kohsuke.args4j.ExampleMode;
 import org.kohsuke.args4j.OptionHandlerFilter;
 
 import java.io.OutputStream;

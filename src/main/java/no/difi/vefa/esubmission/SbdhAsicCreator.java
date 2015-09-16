@@ -21,13 +21,12 @@
  *
  */
 
-package no.difi.vefa.innlevering;
+package no.difi.vefa.esubmission;
 
 import no.difi.asic.AsicWriter;
 import no.difi.asic.AsicWriterFactory;
 import no.difi.asic.MimeType;
 import no.difi.asic.SignatureHelper;
-import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.unece.cefact.namespaces.standardbusinessdocumentheader.ManifestItem;

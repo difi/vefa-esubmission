@@ -21,7 +21,7 @@
  *
  */
 
-package no.difi.vefa.innlevering;
+package no.difi.vefa.esubmission;
 
 import org.kohsuke.args4j.CmdLineException;
 import org.kohsuke.args4j.CmdLineParser;

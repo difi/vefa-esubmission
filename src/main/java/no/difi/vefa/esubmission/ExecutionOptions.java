@@ -21,7 +21,7 @@
  *
  */
 
-package no.difi.vefa.innlevering;
+package no.difi.vefa.esubmission;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -29,7 +29,7 @@ import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.List;
 
-import static no.difi.vefa.innlevering.CmdLineOptions.TEST_FLAG;
+import static no.difi.vefa.esubmission.CmdLineOptions.TEST_FLAG;
 
 /**
  * Created by soc on 12.08.2015.

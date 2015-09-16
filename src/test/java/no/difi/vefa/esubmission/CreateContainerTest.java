@@ -21,7 +21,7 @@
  *
  */
 
-package no.difi.vefa.innlevering;
+package no.difi.vefa.esubmission;
 
 import no.difi.asic.AsicWriterFactory;
 import org.slf4j.Logger;

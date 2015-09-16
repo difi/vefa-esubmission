@@ -163,7 +163,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>no.difi.vefa.innlevering.Main</mainClass>
+                            <mainClass>no.difi.vefa.esubmission.Main</mainClass>
                         </manifest>
                     </archive>
                     <descriptorRefs>
