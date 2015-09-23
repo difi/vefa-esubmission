@@ -40,9 +40,8 @@ import java.util.zip.ZipInputStream;
  *         Date: 22.09.15
  *         Time: 14.56
  */
-public class SbdhFromAsicExtractor {
+class SbdhFromAsicExtractor {
 
-    // FIXME: refactor into separate class
     public static StandardBusinessDocumentHeader extractSbdhFromAsic(InputStream inputStream) {
         StandardBusinessDocumentHeader standardBusinessDocumentHeader = null;
 

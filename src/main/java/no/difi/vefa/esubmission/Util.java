@@ -35,7 +35,7 @@ import java.util.Date;
  *         Date: 13.08.15
  *         Time: 20.39
  */
-public class Util {
+class Util {
 
     public static final String SAMPLE_SBDH_RESOURCE = "sbdh-peppol-sample-v1.3.xml";
     public static final String SAMPLE_UBL_DOCUMENT = "trdm090-submit-tender-sample.xml";

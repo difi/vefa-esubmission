@@ -30,7 +30,7 @@ import java.io.InputStream;
  *         Date: 13.08.15
  *         Time: 14.59
  */
-public class KeyStoreUtil {
+class KeyStoreUtil {
 
 
     public static final String VEFA_INNLEVERING_JKS = "vefa-esubmission.jks";

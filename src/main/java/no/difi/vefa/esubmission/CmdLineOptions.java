@@ -43,7 +43,7 @@ import java.util.List;
  *         Date: 11.08.15
  *         Time: 11.29
  */
-public class CmdLineOptions {
+class CmdLineOptions {
 
     public static final Logger log = LoggerFactory.getLogger(CmdLineOptions.class);
     public static final String VEFA_INNLEVERING_ASICE = "vefa-esubmission.asice";
