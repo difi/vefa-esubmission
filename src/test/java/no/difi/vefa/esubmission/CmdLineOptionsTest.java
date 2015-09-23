@@ -63,12 +63,25 @@ public class CmdLineOptionsTest {
     }
 
     @Test
+    public void sbdhWithoutBis() {
+        CmdLineOptions options = new CmdLineOptions();
+        CmdLineParser cmdLineParser = new CmdLineParser(options);
+        String args[] = {
+                "-sbdh", "sbdh.xml",
+                "-ks", "test",
+                "-kp", "changeit",
+                "-pp", "changeit"
+        };
+
+    }
+
+    @Test
     public void singleBisDoc() {
         CmdLineOptions options = new CmdLineOptions();
         CmdLineParser cmdLineParser = new CmdLineParser(options);
         String args[] = {
                 "-bis", "trdm090.xml",
-                "-ks","test",
+                "-ks", "test",
                 "-kp", "changeit",
                 "-pp", "changeit"
         };
@@ -81,8 +94,23 @@ public class CmdLineOptionsTest {
         }
 
         assertEquals(options.bisFileName, new File("trdm090.xml"));
-        assertEquals(options.getArchiveFileName(), new File(CmdLineOptions.VEFA_INNLEVERING_ASICE));
+        assertEquals(options.getOutputFile(), new File(CmdLineOptions.VEFA_INNLEVERING_ASICE));
     }
+
+    @Test(expectedExceptions = CmdLineException.class)
+    public void missingKeystoreParams() throws CmdLineException {
+        CmdLineOptions options = new CmdLineOptions();
+        CmdLineParser cmdLineParser = new CmdLineParser(options);
+        String args[] = {
+                "-sbdh", "sbdh.xml",
+                "-kp", "changeit",
+                "-pp", "changeit"
+        };
+
+        cmdLineParser.parseArgument(args);
+        fail("Missing -ks option should fail");
+    }
+
 
     @Test
     public void testToString() throws Exception {

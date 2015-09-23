@@ -34,11 +34,10 @@ import java.util.List;
 /**
  * Holds the options for executing the program. Three stages:
  * <ol>
- *     <li>Reasonable defaults are set.</li>
- *     <li>Command line is parsed under control of the @Option annotations.</li>
- *     <li>The properties are inspected again and the effective set of options is set.</li>
+ * <li>Reasonable defaults are set.</li>
+ * <li>Command line is parsed under control of the @Option annotations.</li>
+ * <li>The properties are inspected again and the effective set of options is set.</li>
  * </ol>
- *
  *
  * @author steinar
  *         Date: 11.08.15
@@ -53,55 +52,69 @@ public class CmdLineOptions {
     public CmdLineOptions() {
     }
 
-    /** Default name of output file */
-    private File archiveFileName = new File(VEFA_INNLEVERING_ASICE);
+    /**
+     * Default name of output file
+     */
+    private File outputFile = new File(VEFA_INNLEVERING_ASICE);
 
-    /** Holds attachments listed with -a option */
+    /**
+     * Holds attachments listed with -a option
+     */
     private List<File> attachments = new ArrayList<File>();
 
     /**
      * Parse the supplied SBDH and create ASiC based upon the contents of the SBDH
      */
-    @Option(name="-sbdh", aliases = {"-auto"}, usage="Creates ASiC based upon contents of SBDH file.", metaVar = "<file>", forbids = {"-bis","-ubl","-scan","-a"})
+    @Option(name = "-sbdh", aliases = {"-auto"}, usage = "Creates ASiC based upon contents of SBDH file.", metaVar = "<file>",
+            forbids = {"-scan", "-wrap", "-unwrap"},
+            depends = {"-ks"}
+    )
     File sbdhFile = null;
+
+    @Option(name = "-unwrap", usage = "Unwraps a base64 encoded payload from a SBD xml document", metaVar = "<file>", forbids = {"-sbdh", "-auto", "-scan", "-wrap"})
+    File unwrapFile = null;
+
+    @Option(name = "-wrap", usage = "Wraps a base64 encoded payload from a SBD xml document", metaVar = "<file>", forbids = {"-sbdh", "-auto", "-scan", "-unwrap"})
+    File asicFileToWrap = null;
 
     /**
      * Create ASiC manually using supplied XML BIS document to be inserted into the ASiC archive. The value "test" indicates to use whatever
      * XML document has been included in the distribution.
      */
-    @Option(name = "-bis", aliases = {"-ubl"}, usage="Name of main XML BIS file",metaVar = "<file>",forbids={"-scan"})
+    @Option(name = "-bis", aliases = {"-ubl"}, usage = "Name of main XML BIS file", metaVar = "<file>", forbids = {"-scan"})
     File bisFileName = null;
+
 
     /**
      * Directory to be scanned for SBDH files
      */
-    @Option(name="-scan", aliases = {"-dir"},usage = "Directory to scan for XML files", metaVar = "<dirname>",forbids={"-bis","-ubl","-sbdh","-a"})
+    @Option(name = "-scan", aliases = {"-dir"}, usage = "Directory to scan for XML files", metaVar = "<dirname>", forbids = {"-bis", "-ubl", "-sbdh", "-a"})
     private File scanDirectory;
 
     /**
      * The keystore holding the private and public key together with any certificates.
      * Value of "test" indicates the use of the supplied test keystore.
      */
-    @Option(name = "-ks", aliases = {"-keystore"}, usage = "File holding the JKS keystore", required = true)
+    @Option(name = "-ks", aliases = {"-keystore"}, usage = "File holding the JKS keystore")
     File keyStoreFile = new File(TEST_FLAG);
 
     @Option(name = "-kp", usage = "KeyStore password.", metaVar = "<KeyStorePassword>")
     String keystorePassword;
 
-    @Option(name="-pp",usage = "Private key password if different from keystore password.", metaVar = "<privateKeyPassoword>")
+    @Option(name = "-pp", usage = "Private key password if different from keystore password.", metaVar = "<privateKeyPassoword>")
     private String privateKeyPassword;
 
 
     @Option(name = "-h", aliases = {"-?", "-help"}, usage = "Print help.", help = true)
     Boolean help = false;
 
-    @Option(name = "-o", aliases = {"-out"}, usage = "The name of the output file, defaults to " +VEFA_INNLEVERING_ASICE , metaVar = "<filename>")
-    void setArchiveFileName(File fileName) {
+    @Option(name = "-o", aliases = {"-out"}, usage = "The name of the output file, defaults to " + VEFA_INNLEVERING_ASICE, metaVar = "<filename>")
+    void setOutputFile(File fileName) {
         log.debug("Setting name of output file to " + fileName);
-        archiveFileName = fileName;
+        outputFile = fileName;
     }
 
-    @Option(name="-a", usage="Name of attachment files. May be repeated.",metaVar = "<filename>")
+    @Option(name = "-a", usage = "Name of attachment files. May be repeated.", metaVar = "<filename>")
     public void setAttachments(File attachment) {
         log.debug("Adding " + attachment + " to list of files to be attached");
         this.attachments.add(attachment);
@@ -111,8 +124,8 @@ public class CmdLineOptions {
         return sbdhFile;
     }
 
-    public File getArchiveFileName() {
-        return archiveFileName;
+    public File getOutputFile() {
+        return outputFile;
     }
 
     public List<File> getAttachments() {
@@ -143,11 +156,18 @@ public class CmdLineOptions {
         return keyStoreFile;
     }
 
+    public File getUnwrapFile() {
+        return unwrapFile;
+    }
+
+    public File asicFileToWrap() {
+        return asicFileToWrap;
+    }
 
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("CmdLineOptions{");
-        sb.append("archiveFileName=").append(archiveFileName);
+        sb.append("archiveFileName=").append(outputFile);
         sb.append(", attachments=").append(attachments);
         sb.append(", sbdhFile=").append(sbdhFile);
         sb.append(", bisFileName=").append(bisFileName);

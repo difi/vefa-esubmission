@@ -23,6 +23,8 @@
 
 package no.difi.vefa.esubmission;
 
+import no.difi.vefa.sbdh.SbdhParser;
+import no.difi.vefa.sbdh.SbdhParserFactory;
 import org.testng.annotations.Test;
 import org.unece.cefact.namespaces.standardbusinessdocumentheader.ManifestItem;
 import org.unece.cefact.namespaces.standardbusinessdocumentheader.StandardBusinessDocumentHeader;
@@ -48,7 +50,9 @@ public class SbdhParserTest {
 
         InputStream sbdhInputStream = SbdhParserTest.class.getClassLoader().getResourceAsStream(SBDH_SAMPLE_RESOURCE);
         assertNotNull(sbdhInputStream, "Unable to locate " + SBDH_SAMPLE_RESOURCE + " in class path");
-        SbdhParser sbdhParser = new SbdhParser();
+
+        SbdhParser sbdhParser = SbdhParserFactory.parserForSbdhOnly();
+
         StandardBusinessDocumentHeader sbdh = sbdhParser.parse(sbdhInputStream);
 
         assertEquals(sbdh.getManifest().getNumberOfItems(), BigInteger.valueOf(2));
@@ -70,7 +74,7 @@ public class SbdhParserTest {
     public void parseInvalidXml() throws Exception {
         InputStream is = SbdhParserTest.class.getClassLoader().getResourceAsStream("sample-readme.txt");
         assertNotNull(is, "unable to locate sample-readme.txt in class path");
-        SbdhParser sbdhParser = new SbdhParser();
+        SbdhParser sbdhParser = SbdhParserFactory.parserForSbdhOnly();
         StandardBusinessDocumentHeader sbdh = sbdhParser.parse(is);
     }
 }

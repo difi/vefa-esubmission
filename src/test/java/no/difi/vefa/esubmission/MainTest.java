@@ -50,6 +50,7 @@ public class MainTest {
     public void testCreateViaCommandLine() throws Exception {
 
         String args[] = {
+                "-sbdh","TEST",
                 "-bis","TEST",
                 "-ks", "TEST"
         };
@@ -66,6 +67,41 @@ public class MainTest {
         };
 
         Main.main(args);
+    }
+
+    @Test
+    public void wrapAsic() {
+        String args[] = {
+                "-sbdh","TEST",
+                "-ks","TEST",
+                "-o", "vefa-esubmission.asice"
+        };
+
+        Main.main(args);
+
+        String wrapArgs[] = {
+
+                "-wrap","vefa-esubmission.asice",
+                "-o", "sbd.xml"
+        };
+
+        Main.main(wrapArgs);
+
+        File sbd = new File("sbd.xml");
+
+        assertTrue(sbd.canRead(), "Seems that sbd.xml was not created when wrapping generated asic file");
+
+        // Finally unwrap it
+
+        String[] unwrapArgs = {
+                "-unwrap","sbd.xml",
+                "-out","vefa-submission-regenerated.asice"
+        };
+
+        Main.main(unwrapArgs);
+
+        File regeneratedAsic = new File("vefa-submission-regenerated.asice");
+        assertTrue(regeneratedAsic.canRead());
 
     }
 

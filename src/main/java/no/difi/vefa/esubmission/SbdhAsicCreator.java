@@ -27,6 +27,8 @@ import no.difi.asic.AsicWriter;
 import no.difi.asic.AsicWriterFactory;
 import no.difi.asic.MimeType;
 import no.difi.asic.SignatureHelper;
+import no.difi.vefa.sbdh.SbdhParser;
+import no.difi.vefa.sbdh.SbdhParserFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.unece.cefact.namespaces.standardbusinessdocumentheader.ManifestItem;
@@ -53,7 +55,7 @@ class SbdhAsicCreator {
     public SbdhAsicCreator(SignatureHelper signatureHelper) {
 
         this.signatureHelper = signatureHelper;
-        sbdhParser = new SbdhParser();
+        sbdhParser = SbdhParserFactory.parserForSbdhOnly();
     }
 
 
@@ -67,7 +69,7 @@ class SbdhAsicCreator {
         }
 
         File sbdhFile;
-        File asicFile = executionOptions.getArchiveFileName();
+        File asicFile = executionOptions.getOutputFile();
 
         // Determines whether to use the internal SBDH or not.
         if (executionOptions.isInternalTestSbdhBeingUsed()) {

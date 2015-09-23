@@ -32,20 +32,23 @@ import java.util.List;
 import static no.difi.vefa.esubmission.CmdLineOptions.TEST_FLAG;
 
 /**
+ * Holds the effective execution options.
+ *
  * Created by soc on 12.08.2015.
  */
 public class ExecutionOptions {
 
 
 
-    public enum ExecMode { SBDH, MANUAL, SCAN;}
+    public enum ExecMode { SBDH, MANUAL, SCAN, WRAP, UNWRAP;}
+
     public static final String TRDM090_SUBMIT_TENDER_SAMPLE_XML = "trdm090-submit-tender-sample.xml";
 
-    private CmdLineOptions options;
+    private CmdLineOptions cmdLineOptions;
 
-    public ExecutionOptions(CmdLineOptions options) {
+    public ExecutionOptions(CmdLineOptions cmdLineOptions) {
 
-        this.options = options;
+        this.cmdLineOptions = cmdLineOptions;
     }
 
     public InputStream getKeyStoreStream() {
@@ -57,9 +60,9 @@ public class ExecutionOptions {
             keyStoreInputStream = KeyStoreUtil.sampleKeyStoreStream();
         } else {
             try {
-                keyStoreInputStream = new FileInputStream(options.getKeyStoreFile());
+                keyStoreInputStream = new FileInputStream(cmdLineOptions.getKeyStoreFile());
             } catch (FileNotFoundException e) {
-                throw new IllegalStateException("Unable to open keystore " + options.getKeyStoreFile() + ". " + e.getMessage(), e);
+                throw new IllegalStateException("Unable to open keystore " + cmdLineOptions.getKeyStoreFile() + ". " + e.getMessage(), e);
             }
 
         }
@@ -68,33 +71,33 @@ public class ExecutionOptions {
 
 
     private boolean isTestKeystoreBeingUsed() {
-        return TEST_FLAG.equals(options.getKeyStoreFile().getName().toLowerCase());
+        return TEST_FLAG.equals(cmdLineOptions.getKeyStoreFile().getName().toLowerCase());
     }
 
     public String getKeyStorePassword() {
         if (isTestKeystoreBeingUsed()) {
             return KeyStoreUtil.getKeyStorePassword();
         } else
-            return options.getKeystorePassword();
+            return cmdLineOptions.getKeystorePassword();
     }
 
     public String getPrivateKeyPassword() {
         if (isTestKeystoreBeingUsed()) {
             return KeyStoreUtil.getPrivateKeyPassord();
         } else
-            return options.getPrivateKeyPassword();
+            return cmdLineOptions.getPrivateKeyPassword();
     }
 
-    public File getArchiveFileName() {
-        return options.getArchiveFileName();
+    public File getOutputFile() {
+        return cmdLineOptions.getOutputFile();
     }
 
     public List<File> getAttachments() {
-        return options.getAttachments();
+        return cmdLineOptions.getAttachments();
     }
 
     public File getBisFileName() {
-        return options.getBisFileName();
+        return cmdLineOptions.getBisFileName();
     }
 
     /**
@@ -103,16 +106,16 @@ public class ExecutionOptions {
     public InputStream getBisFileInputStream() {
         InputStream bisFileAsInputStream = null;
 
-        if (TEST_FLAG.equals(options.getBisFileName().getName().toLowerCase())) {
+        if (TEST_FLAG.equals(cmdLineOptions.getBisFileName().getName().toLowerCase())) {
             bisFileAsInputStream = Main.class.getClassLoader().getResourceAsStream(TRDM090_SUBMIT_TENDER_SAMPLE_XML);
             if (bisFileAsInputStream == null) {
                 throw new IllegalStateException("Internal sample file " + TRDM090_SUBMIT_TENDER_SAMPLE_XML + " not found in classpath");
             }
         } else {
             try {
-                bisFileAsInputStream = new FileInputStream(options.getBisFileName());
+                bisFileAsInputStream = new FileInputStream(cmdLineOptions.getBisFileName());
             } catch (FileNotFoundException e) {
-                throw new IllegalStateException("File " + options.getBisFileName() + " not found.", e);
+                throw new IllegalStateException("File " + cmdLineOptions.getBisFileName() + " not found.", e);
             }
         }
 
@@ -120,10 +123,10 @@ public class ExecutionOptions {
     }
 
     public String getBisFileEntryName() {
-        if ("test".equals(options.getBisFileName().getName().toLowerCase())) {
+        if ("test".equals(cmdLineOptions.getBisFileName().getName().toLowerCase())) {
             return TRDM090_SUBMIT_TENDER_SAMPLE_XML;
         } else
-            return options.getBisFileName().getName();
+            return cmdLineOptions.getBisFileName().getName();
     }
 
     /** Indicates if the user has specified some form of the string "test" as the BIS file */
@@ -132,7 +135,7 @@ public class ExecutionOptions {
     }
 
     public File getSbdhFile() {
-        return options.getSbdhFile();
+        return cmdLineOptions.getSbdhFile();
     }
 
     /** Indicates whether the user specified <code>-sbdh test</code> on the command line */
@@ -140,16 +143,38 @@ public class ExecutionOptions {
         return (TEST_FLAG.equals(getSbdhFile().getName().toLowerCase()));
     }
 
+    /** Provides the name of the file holding the base64 encoded payload to be unwrapped into an ASiC archive */
+    public File sbdFileToUnwrap() {
+        return cmdLineOptions.getUnwrapFile();
+    }
+
+    /** Provides the name of the file holding the ASiC archive to be wrapped as base64 encoded payload in an SBD */
+    public File asicFileToWrap() {
+        return cmdLineOptions.asicFileToWrap();
+    }
 
     public ExecMode getExecutionMode() {
-        if (options.getSbdhFile() != null) {
+
+        // Only -sbdh <filename> provided, no -bis specified
+        if (cmdLineOptions.getSbdhFile() != null && cmdLineOptions.getBisFileName() == null) {
             return ExecMode.SBDH;
-        } else
-        if (options.getScanDirectory() != null) {
-            return ExecMode.SCAN;
-        } else if (options.getBisFileName() != null) {
-            return ExecMode.MANUAL;
         }
-        throw new IllegalStateException("Unable to determine mode of operations: " + options);
+        // -sbdh <filename> and -bis <filename> specified
+        else if (cmdLineOptions.getSbdhFile() != null && cmdLineOptions.getBisFileName() != null) {
+                return ExecMode.MANUAL;
+        }
+        // -scan
+        else if (cmdLineOptions.getScanDirectory() != null) {
+            return ExecMode.SCAN;
+        }
+        // -wrap
+        else if (cmdLineOptions.asicFileToWrap() != null) {
+            return ExecMode.WRAP;
+        }
+        // -unwrap
+        else if (cmdLineOptions.getUnwrapFile() != null) {
+            return ExecMode.UNWRAP;
+        }
+        throw new IllegalStateException("Unable to determine mode of operations: " + cmdLineOptions);
     }
 }

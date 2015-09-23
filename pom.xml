@@ -99,6 +99,13 @@
             <version>0.9.0</version>
         </dependency>
 
+        <!-- Manipulation of UN/CEFACT SBDH and SBD, including ASiC payloads -->
+        <dependency>
+            <groupId>no.difi.vefa</groupId>
+            <artifactId>sbdh</artifactId>
+            <version>0.9.1</version>
+        </dependency>
+
         <!-- Command line arguments -->
         <dependency>
             <groupId>args4j</groupId>

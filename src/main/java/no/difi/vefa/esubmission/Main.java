@@ -40,7 +40,10 @@ public class Main {
 
     public static void main(String[] args) {
 
+        // Parses the command line according to the predefined set of option declarations.
         CmdLineOptions options = parseCmdLineOptions(args);
+
+        // Calculates the effective execution options. I.e. any options not specified, will have a reasonable default
         ExecutionOptions executionOptions = new ExecutionOptions(options);
 
         // Establishes the Signature helper with a keystore
@@ -57,6 +60,14 @@ public class Main {
                 case SBDH:
                     SbdhAsicCreator sbdhAsicCreator = new SbdhAsicCreator(signatureHelper);
                     File asicFile = sbdhAsicCreator.createAsicFile(executionOptions);
+                    break;
+
+                case UNWRAP:
+                    AsicWrapper.unwrapAsicFromSbd(executionOptions.sbdFileToUnwrap(), executionOptions.getOutputFile());
+                    break;
+
+                case WRAP:
+                    AsicWrapper.wrapAsicIntoSbd(executionOptions.asicFileToWrap(), executionOptions.getOutputFile());
                     break;
 
                 case SCAN:

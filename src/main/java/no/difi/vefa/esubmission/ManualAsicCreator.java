@@ -56,7 +56,7 @@ class ManualAsicCreator {
     public void createAsicFile() {
 
         try {
-            AsicWriter asicWriter = AsicWriterFactory.newFactory().newContainer(executionOptions.getArchiveFileName());
+            AsicWriter asicWriter = AsicWriterFactory.newFactory().newContainer(executionOptions.getOutputFile());
 
             // A BIS file name of "test" indicates to use the internal test XML document.
             if (executionOptions.isInternalTestBisFileBeingUsed()) {
@@ -75,10 +75,10 @@ class ManualAsicCreator {
             asicWriter.sign(signatureHelper);
 
         } catch (IOException e) {
-            throw new IllegalStateException("Unable to create ASiC archive in " + executionOptions.getArchiveFileName() + ". " + e.getMessage(), e);
+            throw new IllegalStateException("Unable to create ASiC archive in " + executionOptions.getOutputFile() + ". " + e.getMessage(), e);
         }
 
-        log.info("ASiC archive created in:" + executionOptions.getArchiveFileName());
+        log.info("ASiC archive created in:" + executionOptions.getOutputFile());
 
     }
 }
