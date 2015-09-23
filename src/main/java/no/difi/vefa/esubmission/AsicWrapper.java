@@ -23,16 +23,18 @@
 
 package no.difi.vefa.esubmission;
 
-import no.difi.vefa.sbdh.*;
+import no.difi.vefa.sbdh.AsicExtractor;
+import no.difi.vefa.sbdh.AsicExtractorFactory;
+import no.difi.vefa.sbdh.SbdWrapper;
 import org.unece.cefact.namespaces.standardbusinessdocumentheader.ManifestItem;
 import org.unece.cefact.namespaces.standardbusinessdocumentheader.StandardBusinessDocumentHeader;
 
 import java.io.*;
 import java.math.BigInteger;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipInputStream;
 
 /**
+ * Wraps and unwraps ASiC archives as base64 encoded payload within StandardBusinessDocumen instances.
+ *
  * @author steinar
  *         Date: 22.09.15
  *         Time: 12.20
@@ -40,7 +42,9 @@ import java.util.zip.ZipInputStream;
 public class AsicWrapper {
 
 
-    /** UnwrapsASiC archive contained as  base64 encoded payload within &gt;StandardBusinessDocument&lt; */
+    /**
+     * UnwrapsASiC archive contained as  base64 encoded payload within &gt;StandardBusinessDocument&lt;
+     */
     public static void unwrapAsicFromSbd(File unwrapFile, File outputFile) {
 
         AsicExtractor asicExtractor = AsicExtractorFactory.defaultAsicExtractor();
@@ -59,6 +63,12 @@ public class AsicWrapper {
 
     }
 
+    /**
+     * Wraps binary ASiC archive as base64 payload within SBD XML file.
+     *
+     * @param asicFile   ASiC archive to be encoded
+     * @param sbdXmlFile file into which the results should be written.
+     */
     public static void wrapAsicIntoSbd(File asicFile, File sbdXmlFile) {
 
         InputStream inputStream = getInputStream(asicFile);
@@ -85,7 +95,13 @@ public class AsicWrapper {
 
     }
 
-    private static StandardBusinessDocumentHeader createOuterSbdh(StandardBusinessDocumentHeader sbdh) {
+    /**
+     * Modifies the inner SBDH to be used as the outer SBDH.
+     *
+     * @param sbdh the inner SBDH as extracted from the ASiC archive
+     * @return
+     */
+    static StandardBusinessDocumentHeader createOuterSbdh(StandardBusinessDocumentHeader sbdh) {
 
         sbdh.getManifest().getManifestItem().clear();
 
@@ -100,6 +116,13 @@ public class AsicWrapper {
         return sbdh;
     }
 
+    /**
+     * Closes and re-opens the inpustream associated with the supplied ASiC file.
+     *
+     * @param asicFile    file object associated with the supplied InputStream
+     * @param inputStream InputStream to be closed
+     * @return the re-opened InputStream
+     */
     private static InputStream closeAndOpen(File asicFile, InputStream inputStream) {
         // Reopen input file
         try {
@@ -112,7 +135,9 @@ public class AsicWrapper {
     }
 
 
-
+    /**
+     * Convenience method for opening a file for output
+     */
     private static OutputStream getOutputStream(File outputFile) {
         OutputStream outputStream;
         try {
@@ -123,6 +148,9 @@ public class AsicWrapper {
         return outputStream;
     }
 
+    /**
+     * Convenience method for opening a file for input
+     */
     private static InputStream getInputStream(File unwrapFile) {
         InputStream result;
         try {
@@ -133,5 +161,4 @@ public class AsicWrapper {
         }
         return result;
     }
-
 }
