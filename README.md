@@ -101,10 +101,24 @@ This is how you create an ASiC archive from the file `trdm090.xml`:
 The resulting ASiC archive will contain `trdom090.xml` (marked as the Rootfile in `META-INF/asicmanifest.xml`)
  and `brochure.pdf`.
 
+### Wrapping ASiC archive as base64 payload inside StandardBusinessDocument
+
+Given an ASiC archive to be transmitted as base64 payload wrapped inside a <StandardBusinessDocument> element together with 
+a SBDH, this command will create a new "outer" SBDH based upon extraction of the ```sbdh.xml``` from the ASiC archive:
+ 
+    java -jar vefa-esubmission.jar -wrap vefa-esubmission-703572024684397217.asice \
+        -o sbd-to-be-transmitted.xml
+
+### Unwrapping base64 encoded ASiC payload from StandardBusinessDocument
+    
+    java -jar vefa-esubmission.jar -unwrap sbd.xml -o message.asice
+    
 ### Creating multiple ASiC archives
+
 A directory is scanned, and for each XML file found, an ASiC archive is created.
 
 Note! This feature has not yet been implemented.
+
 
 ### Iterates all XML files in directory_name and creates corresponding messages
 
