@@ -26,7 +26,7 @@
     <groupId>no.difi.vefa</groupId>
     <artifactId>vefa-esubmission</artifactId>
     <packaging>jar</packaging>
-    <version>0.9.0</version>
+    <version>0.9.1-SNAPSHOT</version>
     <name>vefa-esubmission</name>
     <description>
         Command line utility for generating ASiC archives, which may be transported through the
