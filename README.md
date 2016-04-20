@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/difi/vefa-esubmission.svg?branch=master)](https://travis-ci.org/difi/vefa-esubmission)
+
 # vefa-esubmission - shared component for creating ASiC-based eSubmission messages
 
 The purpose of this component is to create valid eSubmission messages suitable for
